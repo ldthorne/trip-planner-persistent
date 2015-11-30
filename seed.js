@@ -58,6 +58,10 @@ var data = {
     {name: "Union Square Holiday Market", place: [new Place({address: "Union Sq & W 14th St", city: "New York", state: "NY", phone: "123-456-7890", location: [40.733615, -73.987995]})], age_range: "All" },
     {name: "Strand Bookstore", place: [new Place({address: "828 Broadway", city: "New York", state: "NY", phone: "123-456-7890", location: [40.733274, -73.990870]})], age_range: "All" }
   ]
+  // ,
+  // Day: [
+  //   {number: 1, hotel: [], restaurants: [], activities: []}
+  // ]
 };
 
 mongoose.connection.on('open', function() {
