@@ -16,18 +16,21 @@ var DaySchema = new mongoose.Schema({
 
 var dayModel = mongoose.model('Day', DaySchema);
 
-// Creates a first day
-// dayModel.findOrCreate({
-// 		number: 1
-// 	})
-// 	.then(function() {
-// 		var newDay = new dayModel({
-// 			number: 1
-// 		});
-// 		return newDay.save();
-// 	}).then(function(){
-// 		console.log("this was successful")
-// 	});
+//gabe's code for find or creating in a collection
+function findOrCreate(model, properties) {
+    return model.findOne(properties).exec().then(function(instance) {
+        if (instance) return instance; // --> promise for found instance
+        return model.create(properties); // --> promise for created instance
+    });
+}
+
+//checks if there is a day in the collection. if there isn't, it adds a day.
+findOrCreate(dayModel, {number: 1})
+	.then(function(day){
+		console.log(day)
+	}).then(null, function(err){
+		console.error(err)
+	})
 
 
 

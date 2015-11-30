@@ -9,11 +9,11 @@ var $ = require("jQuery");
 
 //gets all the days
 router.get("/day", function(req,res){
-	// Days.create({
-	// 	number: 1
-	// }).then(function(newDay) {
-	// 	res.send(newDay.toJSON());
-	// })
+	Days.find({})
+		.then(function(foundDays) {
+			console.log("Inside the router get / function", foundDays);
+			res.send(foundDays);
+		})
 });
 
 //gets a specific day
@@ -34,17 +34,16 @@ router.delete("/day/:number", function(req,res){
 
 //adds a day
 router.post("/day", function(req,res){
-	console.log(req.body)
-	var dayNum, day;
-	Days.find({}).then(function(foundDays) {
-		dayNum = foundDays.length;
-		Days.create({
-			number: dayNum + 1
-		})
-	});
+	var currentDay = req.body.numDays;
+	Days.create({
+		number: (Number(currentDay) + 1)	
+	})
+	.then(function(newDay) {
+		console.log(newDay)
+	})
 });
 
-//add a restaurant
+//add an attraction
 router.post("/day/:number", function(req,res,next){
 	var attractionName = req.body.sectionName;
 	var attractionType = req.body.attractionType;

@@ -6,6 +6,22 @@ $(function () {
         []
     ];
 
+    function main() {
+        $.get('api/day', function(allDays) {
+            console.log("Inside main function", allDays);
+            // allDays.forEach(function(day) {
+
+            // })
+            console.log(allDays.length);
+            for (var i = 1; i < allDays.length; i++) {
+                var $newDayButton = createDayButton(i + 1);
+                $addDayButton.before($newDayButton);
+                days.push([]);
+            };
+        })
+    }
+    main();
+
     var currentDay = 1;
 
     var placeMapIcons = {
@@ -146,8 +162,6 @@ $(function () {
 
         var $this = $(this);
         var sectionName = $this.parent().attr('id').split('-')[0];
-        console.log($this)
-        console.log(currentDay)
         var $listToAppendTo = $('#' + sectionName + '-list').find('ul');
         var placeName = $this.siblings('select').val();
         var placeObj = getPlaceObject(sectionName, placeName);
@@ -198,7 +212,7 @@ $(function () {
         $.ajax({
             method: 'POST',
             url: '/api/day',
-            // data: someDataToSend,
+            data: {numDays: currentDay},
             success: function () {
                 console.log("inside ajax get method")
             },
