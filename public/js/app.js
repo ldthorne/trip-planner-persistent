@@ -85,6 +85,18 @@ $(function () {
 
         days.splice(dayNum - 1, 1);
 
+        $.ajax({
+            method: 'DELETE',
+            url: '/api/day/' + dayNum,
+            // data: someDataToSend,
+            success: function () {
+                console.log("inside ajax delete method")
+            },
+            error: function (errorObj) {
+                console.error(errorObj)
+            }
+        });
+
         setDayButtons();
         setDay(1);
 
@@ -134,12 +146,26 @@ $(function () {
 
         var $this = $(this);
         var sectionName = $this.parent().attr('id').split('-')[0];
+        console.log($this)
+        console.log(currentDay)
         var $listToAppendTo = $('#' + sectionName + '-list').find('ul');
         var placeName = $this.siblings('select').val();
         var placeObj = getPlaceObject(sectionName, placeName);
 
         var createdMapMarker = drawLocation(map, placeObj.place[0].location, {
             icon: placeMapIcons[sectionName]
+        });
+
+        $.ajax({
+            method: 'POST',
+            url: '/api/day/' + currentDay,
+            data: {sectionName: placeName, attractionType: sectionName},
+            success: function () {
+                console.log("inside ajax post method")
+            },
+            error: function (errorObj) {
+                console.error(errorObj)
+            }
         });
 
         days[currentDay - 1].push({place: placeObj, marker: createdMapMarker, section: sectionName});
@@ -168,6 +194,18 @@ $(function () {
     });
 
     $addDayButton.on('click', function () {
+
+        $.ajax({
+            method: 'POST',
+            url: '/api/day',
+            // data: someDataToSend,
+            success: function () {
+                console.log("inside ajax get method")
+            },
+            error: function (errorObj) {
+                console.error(errorObj)
+            }
+        });
 
         var currentNumOfDays = days.length;
         var $newDayButton = createDayButton(currentNumOfDays + 1);
