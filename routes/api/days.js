@@ -11,6 +11,7 @@ var $ = require("jQuery");
 router.get("/day", function(req,res){
 	Days.find({}).populate('hotels restaurants activities')
 		.exec(function(err, data){
+
 			console.log(data[0].restaurants);
 		});
 });
@@ -19,12 +20,11 @@ router.get("/day", function(req,res){
 router.get("/day/:number", function(req,res){
 	console.log("Inside get /day/:number");
 	var dayNum = req.params.number;
-	Days.findOne({number: dayNum}).populate(
-		{path: restaurants})
+	Days.findOne({number: dayNum})
+	// .populate('hotels restaurants activities')		
 		.exec(function(err, data) {
 			console.log("Inside populate exec");
-			console.log(data.restaurants);
-			// console.log("hotel is",data.hotels);
+			console.log("data is", data);
 			// console.log("restaurant is", data.restaurants)
 		});
 });

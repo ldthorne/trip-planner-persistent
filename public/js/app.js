@@ -7,7 +7,7 @@ $(function () {
     ];
     
     function main() {
-        $.get('api/day', function(allDays) {
+        $.get('api/day/1', function(allDays) {
             console.log("Inside main function", allDays);
 
             // allDays.forEach(function(oneDay) {
