@@ -9,19 +9,24 @@ var $ = require("jQuery");
 
 //gets all the days
 router.get("/day", function(req,res){
-	Days.find({})
-		.then(function(foundDays) {
-			console.log("Inside the router get / function", foundDays);
-			res.send(foundDays);
-		})
+	Days.find({}).populate('hotels restaurants activities')
+		.exec(function(err, data){
+			console.log(data[0].restaurants);
+		});
 });
 
 //gets a specific day
 router.get("/day/:number", function(req,res){
+	console.log("Inside get /day/:number");
 	var dayNum = req.params.number;
-	Days.find({number: dayNum}).exec().then(function(day){
-		res.send(day);
-	});
+	Days.findOne({number: dayNum}).populate(
+		{path: restaurants})
+		.exec(function(err, data) {
+			console.log("Inside populate exec");
+			console.log(data.restaurants);
+			// console.log("hotel is",data.hotels);
+			// console.log("restaurant is", data.restaurants)
+		});
 });
 
 //removes a specific day
@@ -36,11 +41,11 @@ router.delete("/day/:number", function(req,res){
 router.post("/day", function(req,res){
 	var currentDay = req.body.numDays;
 	Days.create({
-		number: (Number(currentDay) + 1)	
+		number: currentDay	
 	})
 	.then(function(newDay) {
-		console.log(newDay)
-	})
+		console.log(newDay);
+	});
 });
 
 //add an attraction
@@ -62,7 +67,7 @@ router.post("/day/:number", function(req,res,next){
 					var hotelId = hotel._id;
 					foundDay.hotels = hotelId;
 					foundDay.save();
-				})
+				});
 		}
 		else if (attractionType === 'restaurants') {
 			Restaurant.findOne({name: attractionName})
@@ -73,7 +78,7 @@ router.post("/day/:number", function(req,res,next){
 					foundDay.save();
 					// console.log(foundDay);
 					// console.log("we found our restaurant", restaurant);
-				})
+				});
 		}
 		else if (attractionType === 'activities') {
 			Activity.findOne({name: attractionName})
@@ -82,9 +87,9 @@ router.post("/day/:number", function(req,res,next){
 					foundDay.activities.push(activityId);
 					foundDay.save();
 					// console.log("we found our activity", activity);
-				})
+				});
 		}
-	})
+	});
 
 });
 

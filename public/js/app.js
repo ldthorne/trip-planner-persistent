@@ -5,19 +5,39 @@ $(function () {
     var days = [
         []
     ];
-
+    
     function main() {
         $.get('api/day', function(allDays) {
             console.log("Inside main function", allDays);
-            // allDays.forEach(function(day) {
 
+            // allDays.forEach(function(oneDay) {
+            //     // console.dir(oneDay);
+            //     // Days.findOne({_id: oneDay._id}).populate('hotels restaurants activities').exec()
+            //     //     .then(function (document) {
+            //     //         // document.pathA is populated
+            //     //         console.dir(document);
+            //     //     });
+            //       // oneDay.populate('hotels restaurants activities').execPopulate()
+            //       //   .then(function(popDay) {
+            //       //       // popDay now has objects in place of _id s!
+            //       //       console.log(popDay);
+            //       //   });
+            //     // oneDay.activities.forEach(function(oneActivity) {
+            //     //     console.log(oneActivity);
+            //     // });
+            //     // oneDay.restaurants.forEach(function(oneRest) {
+            //     //     console.log(oneRest);
+            //     // });
             // })
-            console.log(allDays.length);
+
+            // Loads the day buttons
             for (var i = 1; i < allDays.length; i++) {
                 var $newDayButton = createDayButton(i + 1);
                 $addDayButton.before($newDayButton);
                 days.push([]);
             };
+
+
         })
     }
     main();
@@ -114,8 +134,7 @@ $(function () {
         });
 
         setDayButtons();
-        setDay(1);
-
+        setDay(currentDay - 1);
     };
 
     var mapFit = function () {
@@ -197,6 +216,8 @@ $(function () {
         var indexOfThisPlaceInDay = getIndexOfPlace(nameOfPlace, days[currentDay - 1]);
         var placeInDay = days[currentDay - 1][indexOfThisPlaceInDay];
 
+        // I think i need to remove things from the database here
+        console.log("this is the list item", nameOfPlace);
         placeInDay.marker.setMap(null);
         days[currentDay - 1].splice(indexOfThisPlaceInDay, 1);
         $listItem.remove();
@@ -212,7 +233,7 @@ $(function () {
         $.ajax({
             method: 'POST',
             url: '/api/day',
-            data: {numDays: currentDay},
+            data: {numDays: Number(currentDay + 1)},
             success: function () {
                 console.log("inside ajax get method")
             },
